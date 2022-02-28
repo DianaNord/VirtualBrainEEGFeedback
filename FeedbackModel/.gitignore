@@ -1,4 +1,4 @@
 .idea/*
 __pycache__
 pytiaclient/__pycache__
-data/recordings/
+data/recordings
