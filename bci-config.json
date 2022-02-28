@@ -52,7 +52,7 @@
 		{
 			"mode": "single",
 			"number-roi" : 6,
-			"single-mode-channels": [3, 26, 8, 22, 12, 18]
+			"single-mode-channels": [3, 30, 8, 25, 14, 19]
 		}
 	},
 	"eeg-settings":
@@ -84,22 +84,22 @@
 			"roi": 1,
 			"enabled": true
 		  },
-			"FC5":
+			"FT9":
 		  {
 			"id": 5,
-			"roi": 3,
-			"enabled": true
+			"roi": 0,
+			"enabled": false
 		  },
-			"FC1":
+			"FC5":
 			{
 			"id": 6,
 			"roi": 3,
 			"enabled": true
 			},
-			"Cz":
+			"FC1":
 		  {
 			"id": 7,
-			"roi": 0,
+			"roi": 3,
 			"enabled": true
 		  },
 			"C3":
@@ -114,139 +114,139 @@
 			"roi": 3,
 			"enabled": true
 		  },
-			"CP5":
+			"TP9":
 		  {
 			"id": 10,
-			"roi": 5,
-			"enabled": true
+			"roi": 0,
+			"enabled": false
 		  },
-			"CP1":
+			"CP5":
 		  {
 			"id": 11,
 			"roi": 5,
 			"enabled": true
 		  },
-			"P3":
+			"CP1":
 		  {
 			"id": 12,
 			"roi": 5,
 			"enabled": true
 		  },
-			"P7":
+			"Pz":
 		  {
 			"id": 13,
+			"roi": 0,
+			"enabled": true
+		  },
+			"P3":
+		  {
+			"id": 14,
 			"roi": 5,
 			"enabled": true
 		  },
-			"Pz":
-		  {
-			"id": 14,
-			"roi": 0,
-			"enabled": true
-		  },
-			"O1":
+			"P7":
 			{
 			"id": 15,
-			"roi": 0,
+			"roi": 5,
 			"enabled": true
 			},
-			"Oz":
+			"O1":
 		  {
 			"id": 16,
 			"roi": 0,
 			"enabled": false
 		  },
-		  "O2":
+		  "Oz":
 		  {
 			"id": 17,
 			"roi": 0,
 			"enabled": false
 		  },
-		  "P4":
+		  "O2":
 		  {
 			"id": 18,
-			"roi": 6,
-			"enabled": true
+			"roi": 0,
+			"enabled": false
 		  },
-			"P8":
+			"P4":
 		  {
 			"id": 19,
 			"roi": 6,
 			"enabled": true
 		  },
-		  "CP6":
+		  "P8":
 		  {
 			"id": 20,
 			"roi": 6,
 			"enabled": true
 		  },
-		  "CP2":
+		  "TP10":
 		  {
 			"id": 21,
+			"roi": 0,
+			"enabled": false
+		  },
+			"CP6":
+		  {
+			"id": 22,
 			"roi": 6,
 			"enabled": true
 		  },
-			"C4":
-		  {
-			"id": 22,
-			"roi": 4,
-			"enabled": true
-		  },
-		  "T8":
+		  "CP2":
 		  {
 			"id": 23,
-			"roi": 4,
+			"roi": 6,
 			"enabled": true
 		  },
-			"FC6":
+			"Cz":
 		  {
 			"id": 24,
 			"roi": 4,
 			"enabled": true
 		  },
-		  "FC2":
+		  "C4":
 		  {
 			"id": 25,
 			"roi": 4,
 			"enabled": true
 		  },
-		  "F4":
+		  "T8":
 		  {
 			"id": 26,
-			"roi": 2,
+			"roi": 4,
 			"enabled": true
 		  },
-			"F8":
+			"FT10":
 		  {
 			"id": 27,
+			"roi": 0,
+			"enabled": false
+		  },
+			"FC6":
+		  {
+			"id": 28,
+			"roi": 4,
+			"enabled": true
+		  },
+			"FC2":
+			{
+			"id": 29,
+			"roi": 4,
+			"enabled": true
+			},
+			"F4":
+		  {
+			"id": 30,
 			"roi": 2,
 			"enabled": true
 		  },
-			"Fp2":
-		  {
-			"id": 28,
-			"roi": 0,
-			"enabled": true
-		  },
-			"EOGR":
-			{
-			"id": 29,
-			"roi": 0,
-			"enabled": false
-			},
-			"EOGU":
-		  {
-			"id": 30,
-			"roi": 0,
-			"enabled": false
-		  },
-		  "EOGD":
+		  "F8":
 		  {
 			"id": 31,
-			"roi": 0,
-			"enabled": false
+			"roi": 2,
+			"enabled": true
 		  },
-		  "EOGL":
+		  "FP2":
 		  {
 			"id": 32,
 			"roi": 0,

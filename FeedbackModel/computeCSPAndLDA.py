@@ -10,7 +10,7 @@ import numpy as np
 from bci_modules import CSPAndLDA
 
 if __name__ == "__main__":
-    directory = 'data/recordings/sub-P001/mat-files/'
+    directory = 'data/recordings/current/mat-files/'
     directory_out = directory + '../'
     config_file_name = '/../bci-config.json'
 

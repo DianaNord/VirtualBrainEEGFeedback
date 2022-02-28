@@ -54,8 +54,8 @@ def save_to_mat(file_path, data):
 
 
 if __name__ == "__main__":
-    directory = 'data/recordings/sub-P001/ses-S002/eeg/'
-    xdf_file_path = directory + 'sub-P001_ses-S002_task-Default_run-001_eeg.xdf'
+    directory = 'data/recordings/current/ses-S004/eeg/'
+    xdf_file_path = directory + 'sub-P001_ses-S004_task-Default_run-001_eeg.xdf'
     mat_file_path = directory + 'messung.mat'
 
     cwd = os.getcwd()
