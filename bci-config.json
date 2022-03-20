@@ -50,7 +50,7 @@
 		"block-size": 1,
 		"erds":
 		{
-			"mode": "single",
+			"mode": "average",
 			"number-roi" : 6,
 			"single-mode-channels": [3, 30, 8, 25, 14, 19]
 		}
@@ -201,7 +201,7 @@
 			"Cz":
 		  {
 			"id": 24,
-			"roi": 4,
+			"roi": 0,
 			"enabled": true
 		  },
 		  "C4":
