@@ -9,8 +9,8 @@ from bci_modules import CSPAndLDA
 
 if __name__ == "__main__":
 
-    modality = 'ME'
-    subject_id = 'sub-P001'
+    modality = 'MI'
+    subject_id = 'sub-P002'
 
     cwd = os.getcwd()
     root_dir = cwd + '/data/current/'

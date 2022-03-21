@@ -64,10 +64,10 @@ if __name__ == "__main__":
 
     mode = 'ONLINE'
 
-    modality = 'ME'
-    subject_id = 'sub-P001'
-    session = 'ses-S002'
-    run = 'run-001'
+    modality = 'MI'
+    subject_id = 'sub-P002'
+    session = '2'
+    run = '1'
 
     cwd = os.getcwd()
 
@@ -75,8 +75,10 @@ if __name__ == "__main__":
         root_dir = cwd + '/data/current/'
         out_dir = root_dir + subject_id + '/' + modality
 
-        file_name = subject_id + '_' + session + '_task-Default_' + run + '_eeg.xdf'
-        xdf_file_path = root_dir + subject_id + '/' + session + '/eeg/' + file_name
+        #file_name = subject_id + '_' + session + '_task-Default_' + run + '_eeg.xdf'
+        file_name = '/subj_' + session + '_block' + run + '.xdf'
+        #xdf_file_path = root_dir + subject_id + '/' + session + '/eeg/' + file_name
+        xdf_file_path = root_dir + subject_id + file_name
         mat_file_path = out_dir + '/messung.mat'
 
         if not os.path.exists(out_dir):
