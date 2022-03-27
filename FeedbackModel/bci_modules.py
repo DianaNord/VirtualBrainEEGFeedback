@@ -1,18 +1,22 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# Includes all classes needed for performing online eeg analyis
+# ----------------------------------------------------------------------------------------------------------------------
+from enum import Enum
 import math
 import numpy as np
+from pylsl import StreamInfo, StreamInlet, StreamOutlet, resolve_stream, local_clock
 import scipy.io
 from scipy import signal, linalg
-from pylsl import StreamInfo, StreamInlet, StreamOutlet, resolve_stream, local_clock
-import threading  # needed both in EEGSimulation and feedbackModel
-from enum import Enum
+import threading
 
 
 class BCIState(Enum):
-    SLEEP = 0
+    START = 0
     REFERENCE = 1
     CUE = 2
     FEEDBACK = 3
     BREAK = 4
+    SLEEP = 5
 
 
 class ERDSMode(str, Enum):
@@ -22,7 +26,7 @@ class ERDSMode(str, Enum):
 
 class BCI:
     def __init__(self, bci_config):
-        self.state = BCIState.SLEEP
+        self.state = BCIState.START
         self.bci_core = None
 
         self.stream_eeg = bci_config['general-settings']['lsl-streams']['eeg']
@@ -36,9 +40,10 @@ class BCI:
         self.thread_erds = threading.Thread(target=self.__compute_erds)
         self.thread_marker = threading.Thread(target=self.start_feedback_loop)
 
-        self.sample_rate = None
-        self.n_enabled_channels = None
-        self.idx_enabled_channels = None
+        self.sample_rate = 0
+        self.idx_start_ref = 0
+        self.n_enabled_channels = 0
+        self.idx_enabled_channels = 0
         self.channel_to_roi_map = []
         self.n_roi = bci_config['feedback-model-settings']['erds']['number-roi']
 
@@ -65,6 +70,7 @@ class BCI:
 
         self.n_enabled_channels = int(info_eeg.channel_count())
         self.sample_rate = int(info_eeg.nominal_srate())
+        self.idx_start_ref = int(info_eeg.nominal_srate() / 2)
 
     def __select_enabled_channels(self, channel_settings, erds_settings):
         list_is_channel_enabled = np.zeros((self.n_enabled_channels,), dtype=bool)
@@ -117,8 +123,10 @@ class BCI:
                                           axis=0)
             elif self.state == BCIState.FEEDBACK:
                 erds_a = np.square(self.bci_core.bandpass_ref.bandpass_filter(sample))
+
+                # This can happen if the state changed to BCIState.BREAK in the meantime
                 if np.any(np.isnan(erds_a)) or np.any(np.isnan(
-                        self.data_ref_mean)):  # TODO check: BCI state was set to BREAK but here it is in state feedback
+                        self.data_ref_mean)):
                     continue
 
                 erds = np.divide(-(self.data_ref_mean - erds_a), self.data_ref_mean)
@@ -128,6 +136,8 @@ class BCI:
                     erds_per_roi[roi] = np.mean(erds[0, self.channel_to_roi_map[roi]])
 
                 outlet_fb_erds.push_sample(erds_per_roi, local_clock())
+            elif self.state == BCIState.START:
+                self.bci_core.bandpass_ref.bandpass_filter(sample)
 
     def __compute_classification(self):
         stream_info = StreamInfo(name=self.stream_fb_cl['name'], channel_count=2, nominal_srate=0,
@@ -145,6 +155,8 @@ class BCI:
 
                 label, distance = self.bci_core.classification(y_lbp)
                 outlet_fb_cl.push_sample([label[0] - 1, distance[0]], local_clock())
+            elif self.state == BCIState.START:
+                self.bci_core.bandpass.bandpass_filter(sample)
 
     def start_feedback_loop(self):
 
@@ -152,6 +164,12 @@ class BCI:
 
         self.thread_classification.start()
         self.thread_erds.start()
+
+        # Feed bandpass filter with a few samples
+        start_time = local_clock()
+        while self.state == BCIState.START:
+            if int(local_clock() - start_time) > 3:
+                self.state = BCIState.SLEEP
 
         while True:
             if inlet_marker is None:
@@ -164,8 +182,10 @@ class BCI:
                 self.state = BCIState.REFERENCE
             elif marker[0] == 'Cue':
                 self.state = BCIState.CUE
+                # Calculate mean erds values over reference period
                 if np.shape(self.data_ref)[0] > 1:
-                    self.data_ref_mean = np.mean(np.delete(self.data_ref, 0, 0), axis=0)
+                    self.data_ref_mean = np.mean(np.delete(self.data_ref, 0, 0)[self.idx_start_ref:, :],
+                                                 axis=0)
                 else:
                     print("ERROR no ERDS values are calculated")
             elif marker[0] == 'Feedback':
@@ -173,10 +193,7 @@ class BCI:
             elif marker[0] == 'End_of_Trial':
                 self.state = BCIState.BREAK
                 self.bci_core.set_lda_distance_parameters()
-
                 self.__reset_erds()
-                # TODO reset bandpass zi for classification & erds?? dont'think so :
-                #  it should behave exactly as if all data were filtered at once -> all previous states should be considered
 
     @staticmethod
     def resolve_lsl_stream(name):
@@ -188,7 +205,6 @@ class BCI:
 class BCICore:
     def __init__(self, sample_rate, bandpass, bandpass_ref, csp, log_band_power, lda):
         self.sample_rate = sample_rate
-        # self.block_size = block_size
         self.bandpass = bandpass
         self.bandpass_ref = bandpass_ref
         self.CSP = csp
@@ -225,7 +241,7 @@ class BCICore:
 
     def lda_disctance_calculation(self):
         # linear distance function
-        # distance equals length of feedback bar -> in VR intesity of flashing?
+        # distance equals length of feedback bar -> in VR intesity of outline glow
         is_class_1 = 1 * (self.label == 1) - 1 * (self.label_buffer[self.cnt_sample] == 1) + self.is_class_buffer[0]
         is_class_2 = 1 * (self.label == 2) - 1 * (self.label_buffer[self.cnt_sample] == 2) + self.is_class_buffer[1]
         class_label = np.argmax([is_class_1, is_class_2], axis=0) + 1
@@ -241,14 +257,6 @@ class BCICore:
             self.cnt_sample = 0
 
         return class_label, distance
-
-    # @staticmethod
-    # def compute_probability(x):
-    #     x_exp = np.exp(x)
-    #     sum_ = np.empty((np.shape(x)[0], 1))
-    #     sum_[:, 0] = np.sum(x_exp, axis=1)
-    #     x_conc = np.repeat(sum_, np.shape(x_exp)[1], axis=1)
-    #     return np.divide(x_exp, x_conc) * 100  # in percent
 
     @staticmethod
     def calculate_accuracy(values, values_ref):
@@ -277,6 +285,7 @@ class Bandpass:
                                     output='sos')
 
         zi = signal.sosfilt_zi(self.sos)
+
         if self.n > 1:
             zi = np.tile(zi, (self.n, 1, 1)).T
         self.zi0 = zi.reshape((np.shape(self.sos)[0], 2, self.n))
@@ -394,7 +403,6 @@ class CSPAndLDA:
     def compute_lda(self, output_path):
         # define extraction parameter --> Features need 1 second to rise + another
         # second due to the moving average filter --> 2sec delay!
-        # n_samples = int(np.floor(self.sample_rate * (self.d_cue + 2)))  # TODO check if this is ok
         n_samples = int(np.floor(self.sample_rate * 3))
         csp_signal = np.square(np.matmul(self.csp_filter, self.eeg))
 
