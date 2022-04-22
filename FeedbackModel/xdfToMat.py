@@ -57,6 +57,7 @@ def find_nearest_index(array, value):
 
 def save_to_mat(file_path, identifier, data):
     if os.path.isfile(file_path):
+        print(file_path, ' append data')
         data_old = scipy.io.loadmat(file_path)[identifier]
         data = np.append(data_old, data, axis=0)
 
@@ -65,12 +66,12 @@ def save_to_mat(file_path, identifier, data):
 
 if __name__ == "__main__":
 
-    mode = 'ONLINE'
+    mode = 'OFFLINE'
 
-    modality = 'MI'
-    subject_id = 'sub-P002'
-    session = '2'
-    run = '1'
+    modality = 'ME'
+    subject_id = 'sub-P003'
+    session = '3'
+    run = '3'
 
     cwd = os.getcwd()
 
@@ -78,9 +79,10 @@ if __name__ == "__main__":
         root_dir = cwd + '/data/current/'
         out_dir = root_dir + subject_id + '/' + modality
 
-        #file_name = subject_id + '_' + session + '_task-Default_' + run + '_eeg.xdf'
+        # file_name = subject_id + '_' + session + '_task-Default_' + run + '_eeg.xdf'
+        # xdf_file_path = root_dir + subject_id + '/' + session + '/eeg/' + file_name
+
         file_name = '/subj_' + session + '_block' + run + '.xdf'
-        #xdf_file_path = root_dir + subject_id + '/' + session + '/eeg/' + file_name
         xdf_file_path = root_dir + subject_id + file_name
         mat_file_path = out_dir + '/messung.mat'
 
@@ -100,10 +102,13 @@ if __name__ == "__main__":
     elif mode == 'OFFLINE':
 
         root_dir = cwd + '/../../pilot-study/'
-        out_dir = root_dir + subject_id + '/' + session + '/' + modality
+        out_dir = root_dir + subject_id + '/' + modality
 
-        file_name = subject_id + '_' + session + '_task-Default_' + run + '_eeg.xdf'
-        xdf_file_path = root_dir + subject_id + '/' + session + '/eeg/' + file_name
+        # file_name = subject_id + '_' + session + '_task-Default_' + run + '_eeg.xdf'
+        # xdf_file_path = root_dir + subject_id + '/' + session + '/eeg/' + file_name
+
+        file_name = 'subj_' + session + '_block' + run + '.xdf'
+        xdf_file_path = root_dir + subject_id + '/' + modality + '/eeg/' + file_name
 
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
@@ -119,6 +124,6 @@ if __name__ == "__main__":
         erds_with_labels = add_class_labels(stream_erds)
         lda_with_labels = add_class_labels(stream_lda)
 
-        save_to_mat(out_dir+'/eeg.mat', 'eeg',  eeg_with_labels)
-        save_to_mat(out_dir+'/erds.mat', 'erds', erds_with_labels)
-        save_to_mat(out_dir+'/lda.mat', 'lda', lda_with_labels)
+        save_to_mat(out_dir+'/eeg_block'+run+'.mat', 'eeg',  eeg_with_labels)
+        save_to_mat(out_dir+'/erds_block'+run+'.mat', 'erds', erds_with_labels)
+        save_to_mat(out_dir+'/lda_block'+run+'.mat', 'lda', lda_with_labels)

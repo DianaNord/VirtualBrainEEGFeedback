@@ -106,12 +106,20 @@ def show_erds_plots(data):
     plt.show()
 
 
-def compute_accuracy(data):
+def compute_accuracy(data, median=False):
     samples_accurate = 0
     samples_total = 0
-    for epoch, cl in zip(data, class_labels):
-        samples_accurate += len(np.where(epoch[0, :] == cl)[0])
-        samples_total += len(epoch[0, :])
+
+    if median:
+        for epoch, cl in zip(data, class_labels):
+            if np.median(epoch[0, :]) == cl:
+                samples_accurate += 1
+            samples_total += 1
+
+    else:
+        for epoch, cl in zip(data, class_labels):
+            samples_accurate += len(np.where(epoch[0, :] == cl)[0])
+            samples_total += len(epoch[0, :])
 
     return samples_accurate / samples_total
 
@@ -129,10 +137,10 @@ def analyze_eeg(eeg):
     info['bads'] = bads
     print(info)
 
-    # Display raw data
+    # # Display raw data
     # for i in range(len(indexes_class_all)):
-    #     raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_fb], info)
-    #     raw.plot(duration=8, show_scrollbars=True, show_scalebars=True)
+    #     raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
+    #     raw.plot(show_scrollbars=True, show_scalebars=True, block=True)
 
     raw = mne.io.RawArray(eeg[1:n_ch + 1, :], info)
 
@@ -153,7 +161,7 @@ def analyze_eeg(eeg):
     # epochs.plot(picks=picks, show_scrollbars=True, events=events, event_id=event_dict)
 
     freqs = np.arange(2, 31)  # frequencies from 2-30Hz
-    vmin, vmax = -1, 1.5  # set min and max ERDS values in plot
+    vmin, vmax = -1, 1  # set min and max ERDS values in plot
     baseline = [tmin, -0.5]  # baseline interval (in s)
     cnorm = TwoSlopeNorm(vmin=vmin, vcenter=0, vmax=vmax)  # min, center, and max ERDS
     kwargs = dict(n_permutations=100, step_down_p=0.05, seed=1,
@@ -194,7 +202,7 @@ def analyze_eeg(eeg):
                 ax.set_yticklabels("")
         fig.colorbar(axes[0].images[-1], cax=axes[-1])
         fig.suptitle(f"ERDS ({event})")
-        plt.savefig('{}/../erds_{}.png'.format(directory, event), format='png')
+        plt.savefig('{}/erds_{}_block_{}.png'.format(directory, event, run), format='png')
         plt.show()
 
     return eeg
@@ -204,21 +212,24 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     root_dir = cwd + '/../../pilot-study/'
 
-    modality = 'ME'
-    subject_id = 'sub-P001'
-    session = 'ses-S002'
-    run = 'run-001'
+    modality = 'MI'
+    subject_id = 'sub-P003'
+    session = '3'
+    run = '3'
 
-    directory = root_dir + subject_id + '/' + session + '/' + modality
+    directory = root_dir + subject_id + '/' + modality
 
     config_file = root_dir + subject_id + '/bci-config.json'
+    # if modality == 'ME' and (run == '1' or run == '2'):
+    #     config_file = root_dir + subject_id + '/bci-config_run1_run2.json'
+
     with open(config_file) as json_file:
         config = json.load(json_file)
 
     # LOAD MAT FILES
-    data_eeg = scipy.io.loadmat(directory + '/eeg.mat')['eeg'].T
-    data_erds = scipy.io.loadmat(directory + '/erds.mat')['erds'].T
-    data_lda = scipy.io.loadmat(directory + '/lda.mat')['lda'].T
+    data_eeg = scipy.io.loadmat(directory + '/eeg_block'+run+'.mat')['eeg'].T
+    data_erds = scipy.io.loadmat(directory + '/erds_block'+run+'.mat')['erds'].T
+    data_lda = scipy.io.loadmat(directory + '/lda_block'+run+'.mat')['lda'].T
 
     # EXTRACT EPOCHS
     sample_rate = config['eeg-settings']['sample-rate']
@@ -237,15 +248,15 @@ if __name__ == "__main__":
     class_labels = data_eeg[0, indexes_class_all] - 121
 
     # COMPUTE ERDS MAP FROM EEG SIGNAL
-    data_eeg = analyze_eeg(data_eeg)
+    # data_eeg = analyze_eeg(data_eeg)
 
     # COMPUTE ACCURACY
-    data_lda = extract_epochs(data_lda)
-    accuracy = compute_accuracy(data_lda)
-    print('Accuracy %: ', accuracy*100)
+    # data_lda = extract_epochs(data_lda)
+    # accuracy = compute_accuracy(data_lda, True)
+    # print('Accuracy %: ', accuracy*100)
 
     # DISPLAY ERDS VALUES
-    # data_erds = extract_epochs(data_erds)
-    # show_erds_plots(data_erds)
+    data_erds = extract_epochs(data_erds)
+    show_erds_plots(data_erds)
 
     print('')
