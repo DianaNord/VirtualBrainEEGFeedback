@@ -1,1 +1,0 @@
-start 1_signalserver_v1.0\signalserver.exe -f 1_signalserver_v1.0\configs\eegsim.xml
