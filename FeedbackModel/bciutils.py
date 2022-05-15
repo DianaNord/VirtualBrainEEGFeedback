@@ -242,7 +242,7 @@ class BCI:
                 y_lbp = self.bci_core.log_band_power.compute_log_band_power(y_csp)
 
                 label, distance = self.bci_core.lda_predict(y_lbp)
-                outlet_fb_cl.push_sample([label[0] - 1, distance[0]], local_clock())
+                outlet_fb_cl.push_sample([label - 1, distance], local_clock())
             elif self.state == BCIState.START:
                 self.bci_core.bandpass_cl.bandpass_filter(sample)
 
@@ -404,7 +404,7 @@ class BCICore:
         x_mat = np.matmul(x_conc, self.LDA.T)
         linear_scores = np.divide(np.multiply(x_mat, 100),
                                   np.max(np.abs(x_mat)))
-        self.label = np.nanargmax(linear_scores, axis=1) + 1
+        self.label = np.nanargmax(linear_scores, axis=1)[0] + 1
         label, distance = self.lda_disctance_calculation()
 
         return label, distance
@@ -428,7 +428,7 @@ class BCICore:
 
         distance = self.is_class_buffer[class_label - 1] / self.sample_rate
 
-        self.label_buffer[self.label_idx] = self.label  # TODO why not take class label?
+        self.label_buffer[self.label_idx] = self.label
         self.is_class_buffer = np.array([is_class_1, is_class_2])
 
         if self.label_idx < self.sample_rate - 1:
@@ -465,7 +465,7 @@ class Bandpass:
 
     def __init__(self, order, fstop, fpass, n):
         self.order = order
-        self.fstop = fstop  # TODO @DN needed?
+        self.fstop = fstop
         self.fpass = fpass
         self.n = n
         self.sos = None

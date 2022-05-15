@@ -1,10 +1,17 @@
 using UnityEngine;
 using System;
 
+/// <summary>
+/// The EventManager handles methods to invoke events.
+/// </summary>
 public class EventManager : MonoBehaviour
 {
     public static EventManager instance;
 
+    /// <summary>
+    /// Makes the class a singleton.
+    /// Is called when the script object is initialised (even if the script is not enabled).
+    /// </summary>
     private void Awake()
     {
         if (instance == null)

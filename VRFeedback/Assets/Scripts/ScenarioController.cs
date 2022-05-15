@@ -6,6 +6,9 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+/// <summary>
+/// Controls the whole scenario: timing of the markers, triggering of the events.
+/// </summary>
 public class ScenarioController : MonoBehaviour
 {
     public static ScenarioController instance;
@@ -21,7 +24,7 @@ public class ScenarioController : MonoBehaviour
 
 	// ------------- private variables -------------
 	const string PathConfig = "Assets/../../bci-config.json";
-    const string Path = "Assets/Resources/MI_run_";
+    const string Path = "Assets/Resources/run_";
 	int round = -1;
 	uint condition;
 	float[] timeBreak = new float[2];
@@ -57,7 +60,10 @@ public class ScenarioController : MonoBehaviour
 	public string LSLStreamNameFbCl{get{return lslStreamNameFbCl;} set{lslStreamNameFbCl = value;}}
 	public string LSLStreamNameFbErds{get{return lslStreamNameFbErds;} set{lslStreamNameFbErds = value;}}
 
-
+    /// <summary>
+    /// Makes the class a singleton and reads the configuration. 
+    /// Is called when the script object is initialised (even if the script is not enabled).
+    /// </summary>
 	void Awake()
 	{
         if (instance == null)
@@ -68,6 +74,9 @@ public class ScenarioController : MonoBehaviour
         LoadConfiguration();
 	}
 
+    /// <summary>
+    /// Reads the configuration file (timing, LSL names) and the order of the tasks.
+    /// </summary>
 	void LoadConfiguration()
 	{
 		blockSequence = new List<String>(File.ReadAllLines(Path+numberRun+".txt"));
@@ -87,9 +96,12 @@ public class ScenarioController : MonoBehaviour
 		LSLStreamNameMarker = obj["general-settings"]["lsl-streams"]["marker"]["name"].Value<string>();
 		LSLStreamIdMarker = obj["general-settings"]["lsl-streams"]["marker"]["id"].Value<string>();
 		LSLStreamNameFbErds = obj["general-settings"]["lsl-streams"]["fb-erds"]["name"].Value<string>();
-		
 	}
 	
+	/// <summary>
+    /// Waits until the session is started by the user.
+    /// Is called on the frame when a script is enabled just before any of the Update methods are called the first time.
+    /// </summary>
     IEnumerator Start()
     {
 		if (showFeedback)
@@ -105,6 +117,9 @@ public class ScenarioController : MonoBehaviour
 		StartBlock();
 	}
 
+    /// <summary>
+    /// Starts a session/block of trials. If feedback is enabled it initializes the feedback streams.
+    /// </summary>
     public void StartBlock()
     {
 		if (showFeedback)
@@ -121,6 +136,9 @@ public class ScenarioController : MonoBehaviour
 		StartCoroutine(StartTrial());
     }
 
+    /// <summary>
+    /// Starts a trial and times the trigger of events. 
+    /// </summary>
 	public IEnumerator StartTrial()
     {
 		yield return new WaitForSecondsRealtime(NextFloat(timeBreak));
@@ -141,6 +159,9 @@ public class ScenarioController : MonoBehaviour
 		EndTrial();		
     }
 	
+	/// <summary>
+    /// Ends a trial. If all tasks are completed it finishes the block. Otherwise the next trial is started. 
+    /// </summary>
 	void EndTrial()
     {		
         round = round + 1;
@@ -153,26 +174,37 @@ public class ScenarioController : MonoBehaviour
         }        
     }
 
+    /// <summary>
+    /// Updates the current condition/task.
+    /// </summary>
 	void UpdateCondition()
 	{
-		string[] str = blockSequence[round].Split('_');
-		condition = ConditionStrToInt[str[str.Length-1]];
+		condition = ConditionStrToInt[blockSequence[round]];
 		if (showFeedback)
 			feedbackStream.CurrentCondition = condition;
 	}
 
+    /// <summary>
+    /// Returns a random value in the provided range.
+    /// </summary>
 	float NextFloat(float[] range)
 	{
 		double val = (random.NextDouble() * (range[1] - range[0]) + range[0]);
 		return (float)val;
 	}
 	
+	/// <summary>
+    /// Triggers the "session finished" event.
+    /// </summary>
 	void BlockFinished() 
     {
 		startSession = false;
 		EventManager.instance.OnTriggerSessionFinished();
     }
 
+    /// <summary>
+    /// Quits the game.
+    /// </summary>
 	public void QuitGame()
     {
 		#if UNITY_EDITOR
