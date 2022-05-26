@@ -3,3 +3,4 @@ __pycache__
 pytiaclient/__pycache__
 data/current
 test.py
+venv
