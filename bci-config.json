@@ -28,7 +28,7 @@
 		{
 		    "duration-ref": 3.0,
 			"duration-cue": 1.25,
-			"duration-task": 3.75,
+			"duration-task": 7,
 			"duration-break": [2.0, 3.5]
 		}
 	},
@@ -201,7 +201,7 @@
 			"Cz":
 		  {
 			"id": 24,
-			"roi": 4,
+			"roi": 0,
 			"enabled": true
 		  },
 		  "C4":

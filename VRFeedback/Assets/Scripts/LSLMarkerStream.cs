@@ -2,6 +2,9 @@
 using LSL;
 using System;
 
+/// <summary>
+/// Creates a LSL stream and writes the markers to the stream outlet.
+/// </summary>
 public class LSLMarkerStream : MonoBehaviour
 {
     string lslStreamName;
@@ -14,6 +17,10 @@ public class LSLMarkerStream : MonoBehaviour
     liblsl.StreamOutlet lslOutlet;
     string[] sample;
 
+    /// <summary>
+    /// Reads the name and id of the LSL stream from the ScenarioController instance.
+    /// Is called on the frame when a script is enabled just before any of the Update methods are called the first time.
+    /// </summary>
     void Start()
     {
         lslStreamName = ScenarioController.instance.LSLStreamNameMarker;
@@ -22,6 +29,9 @@ public class LSLMarkerStream : MonoBehaviour
             ScenarioController.instance.QuitGame();
     }
 
+    /// <summary>
+    /// Creates the stream outlet.
+    /// </summary>
     public bool Initialize()
     {
 		if (string.IsNullOrEmpty(lslStreamName))
@@ -44,6 +54,9 @@ public class LSLMarkerStream : MonoBehaviour
 		return true;
     }
 
+    /// <summary>
+    /// Write the marker to the stream outlet.
+    /// </summary>
     public void Write(string marker)
     {
 		if (lslOutlet == null)

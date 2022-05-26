@@ -1,21 +1,38 @@
-import random
+"""
+Creates sequences with tasks repeated randomly and saves them as text file.
+"""
+
 import os
+import random
 
 
-def create_sequence(trials, tasks):
-    sequence = []
+def create_sequence(trials, my_tasks):
+    """Creates a sequence with tasks repeated randomly.
+
+    Parameters
+    ----------
+    trials: `int`
+        The number of trials for each task.
+    my_tasks: `list`
+        The list of tasks.
+
+    Returns
+    -------
+    my_sequence: `list`
+        A list with the tasks repeated in random order.
+    """
+    my_sequence = []
 
     for t in range(trials):
-        for i in range(len(tasks)):
-            sequence.append(tasks[i])
+        for i in range(len(my_tasks)):
+            my_sequence.append(my_tasks[i])
 
-    random.shuffle(sequence)
-    return sequence
+    random.shuffle(my_sequence)
+    return my_sequence
 
 
 if __name__ == "__main__":
-    tasks_MI = ["MI_r", "MI_l"]  # MI left and right hand
-    tasks_ME = ["ME_r", "ME_l"]  # ME left and right hand
+    tasks = ["r", "l"]  # left and right hand
     N_trials = 10  # trials per task
     N_runs = 3  # number of runs
 
@@ -25,13 +42,8 @@ if __name__ == "__main__":
         os.makedirs(directory)
 
     for r in range(N_runs):
-        sequence_MI = create_sequence(N_trials, tasks_MI)
-        sequence_ME = create_sequence(N_trials, tasks_ME)
+        sequence = create_sequence(N_trials, tasks)
 
-        file_object = open(directory + "MI_run_" + str(r + 1) + ".txt", "w")
-        for trial in sequence_MI:
-            file_object.write(trial + "\n")
-
-        file_object = open(directory + "ME_run_" + str(r + 1) + ".txt", "w")
-        for trial in sequence_ME:
+        file_object = open(directory + "run_" + str(r + 1) + ".txt", "w")
+        for trial in sequence:
             file_object.write(trial + "\n")
