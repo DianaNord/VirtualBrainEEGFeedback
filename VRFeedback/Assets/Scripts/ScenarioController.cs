@@ -104,12 +104,6 @@ public class ScenarioController : MonoBehaviour
     /// </summary>
     IEnumerator Start()
     {
-		if (showFeedback)
-		{
-			feedbackStream = gameObject.GetComponent<LSLFeedbackStream>();
-			erdsStream = gameObject.GetComponent<LSLErdsStream>();
-		}
-
 		Debug.Log("INFO: Wait until session is started by user...");
 
 		yield return new WaitUntil(() => startSession == true);
@@ -124,6 +118,9 @@ public class ScenarioController : MonoBehaviour
     {
 		if (showFeedback)
 		{
+			feedbackStream = gameObject.GetComponent<LSLFeedbackStream>();
+			erdsStream = gameObject.GetComponent<LSLErdsStream>();
+
 			bool fb_initialized = feedbackStream.Initialize() && erdsStream.Initialize();
 
 			if (!fb_initialized)
