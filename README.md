@@ -34,6 +34,7 @@ For computing these *.mat files the following steps are necessary:
 ### VR Environment
 Open the project ``VRFeedback`` in Unity. Make sure the VR headset (HTC Vive) is connected and that you are logged into SteamVR.
 
+In case the scene ``NeuronSphere`` is not visible it must be opened: ``File->Open Scene`` (the path of the scene is ``VRFeedback/Assets/Scenes/NeuronSphere.unity``).
 In the Inspector tab of the ``ScenarioController`` there are 2 important variables which must be set before the "game" is started:
 - Number Run: the number of the text file with a random order of the tasks (``VRFeedback/Assets/Resources/run_x.txt``, created by ``FeedbackModel/sequence_generator.py``)
 - Show Feedback: if checked, the game waits for the LSL feedback and erds stream to be available (run ``FeedbackModel/feedback_model.py`` before starting the game)
