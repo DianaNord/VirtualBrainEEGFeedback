@@ -19,6 +19,7 @@ Contains all necessary settings for the feedback model and the VR environment:
 For testing purposes an eeg signal can be simulated by executing the script ``FeedbackModel/eeg_simulation.py``. Settings for the simulated signal (sample rate, channels etc.) can be changed in ``FeedbackModel/signalserver/configs/eegsim.xml``.
 
 ### Feedback Model
+The dependencies for the feedback model can be installed with ``pip install requirements.txt``. 
 The feedback model is started by executing ``FeedbackModel/feedback_model.py``.
 The script requires following input files:
 - ``bci-config.json`` (make sure all settings are correct before starting the script)
