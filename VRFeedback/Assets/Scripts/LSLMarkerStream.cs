@@ -3,7 +3,7 @@ using LSL;
 using System;
 
 /// <summary>
-/// Creates a LSL stream and writes the markers to the stream outlet.
+/// Observer class. Creates a LSL stream and writes the markers to the stream outlet based on triggered events.
 /// </summary>
 public class LSLMarkerStream : MonoBehaviour
 {
@@ -27,6 +27,14 @@ public class LSLMarkerStream : MonoBehaviour
         lslSourceId = ScenarioController.instance.LSLStreamIdMarker;
         if (!Initialize())
             ScenarioController.instance.QuitGame();
+
+        EventManager.instance.TriggerSessionStarted += OnSessionStarted;
+        EventManager.instance.TriggerSessionFinished += OnSessionFinished;
+        EventManager.instance.TriggerTrialStarted += OnTrialStarted;
+        EventManager.instance.TriggerReference += OnReference;
+        EventManager.instance.TriggerCue += OnCue;
+        EventManager.instance.TriggerFeedback += OnFeedback;
+        EventManager.instance.TriggerTrialEnd += OnTrialEnd;
     }
 
     /// <summary>
@@ -64,5 +72,43 @@ public class LSLMarkerStream : MonoBehaviour
         sample[0] = marker;
         lslOutlet.push_sample(sample, liblsl.local_clock());
         print(marker);
+    }
+
+    void OnSessionStarted()
+    {
+        Write("Session_Start");
+    }
+
+    void OnSessionFinished()
+    {
+        Write("Session_End");
+    }
+
+    void OnTrialStarted(string condition)
+    {
+        Write("Start_of_Trial_" + condition);
+    }
+
+    void OnReference()
+    {
+        Write("Reference");
+    }
+
+    void OnCue(uint condition)
+    {
+        Write("Cue");
+    }
+
+    void OnFeedback(uint condition)
+    {
+        if (!ScenarioController.instance.showFeedback)
+            return;
+
+        Write("Feedback");
+    }
+
+    void OnTrialEnd()
+    {
+        Write("End_of_Trial");
     }
 }

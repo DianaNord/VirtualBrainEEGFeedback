@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Creates connections between scripts and objects for invoked events.
+/// Observer class. Handles objects based on events.
 /// </summary>
 public class ObjectsController : MonoBehaviour
 {
@@ -11,56 +11,19 @@ public class ObjectsController : MonoBehaviour
 	public GameObject brain;
     public GameObject glow;
 
-    internal LSLFeedbackStream feedbackStream;
-    internal LSLMarkerStream markerStream;
-    internal TextureColorController textureController;
-
     /// <summary>
     /// Called once at start of game and subscribes methods to the events.
     /// </summary>
     void Start()
     {
-		feedbackStream = gameObject.GetComponent<LSLFeedbackStream>();
-        markerStream = gameObject.GetComponent<LSLMarkerStream>();
-        textureController = gameObject.GetComponent<TextureColorController>();
-
         // Subscribe methods to events
-        EventManager.instance.TriggerSessionStarted += OnSessionStarted;
-        EventManager.instance.TriggerSessionFinished += OnSessionFinished;
-        EventManager.instance.TriggerTrialStarted += OnTrialStarted;
         EventManager.instance.TriggerReference += OnReference;
         EventManager.instance.TriggerCue += OnCue;
         EventManager.instance.TriggerFeedback += OnFeedback;
-        EventManager.instance.TriggerTrialEnd += OnTrialEnd;
+        EventManager.instance.TriggerTrialEnd += OnResetObjects;
         EventManager.instance.TriggerResetObjects += OnResetObjects;
-        EventManager.instance.TriggerUpdateOutline += OnUpdateOutline;
-        EventManager.instance.TriggerUpdateSurface += OnUpdateSurface;
 
         OnResetObjects();
-    }
-
-    /// <summary>
-    /// Handles what happens at the start of the session.
-    /// </summary>
-    void OnSessionStarted()
-    {
-        markerStream.Write("Session_Start");
-    }
-
-    /// <summary>
-    /// Handles what happens at the end of the session.
-    /// </summary>
-    void OnSessionFinished()
-    {
-        markerStream.Write("Session_End");
-    }
-
-    /// <summary>
-    /// Handles what happens at the start of each trial.
-    /// </summary>
-    void OnTrialStarted(string condition)
-    {
-        markerStream.Write("Start_of_Trial_" + condition);
     }
 
     /// <summary>
@@ -68,7 +31,6 @@ public class ObjectsController : MonoBehaviour
     /// </summary>
     void OnReference()
     {
-        markerStream.Write("Reference");
         fixationCross.SetActive(true);
     }
 
@@ -77,7 +39,6 @@ public class ObjectsController : MonoBehaviour
     /// </summary>
     void OnCue(uint condition)
     {
-        markerStream.Write("Cue");
         if (condition == (uint)ScenarioController.AllConditions.LEFT_HAND)
             arrowLeft.SetActive(true);
         else if (condition == (uint)ScenarioController.AllConditions.RIGHT_HAND)
@@ -93,26 +54,12 @@ public class ObjectsController : MonoBehaviour
             return;
 
         fixationCross.SetActive(false);
-
-        markerStream.Write("Feedback");
-
         brain.SetActive(true);
-        glow.SetActive(true);	
-
+        glow.SetActive(true);
     }
 
     /// <summary>
-    /// Handles what happens at the end of each trial.
-    /// </summary>
-    void OnTrialEnd()
-    {
-        markerStream.Write("End_of_Trial");
-        
-        OnResetObjects();
-    }
-
-    /// <summary>
-    /// Hides all objects and sets the texture of the brain object to default values.
+    /// Hides all objects.
     /// </summary>
     public void OnResetObjects()
 	{
@@ -121,23 +68,5 @@ public class ObjectsController : MonoBehaviour
 		arrowRight.SetActive(false);
 		brain.SetActive(false);
         glow.SetActive(false);	
-
-        textureController.ResetTexture();
 	}
-
-    /// <summary>
-    /// Updates the outline colour and intensity of the brain object.
-    /// </summary>
-    void OnUpdateOutline(float distance, bool is_correct)
-    {
-        textureController.GlowIntensity(distance, is_correct);
-    }
-
-    /// <summary>
-    /// Updates the colour of each region of interest of the brain object. 
-    /// </summary>
-    public void OnUpdateSurface(float[] values)
-    {
-        textureController.UpdateERDSValues(values);
-    }
 }

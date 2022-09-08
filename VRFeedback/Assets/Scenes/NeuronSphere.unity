@@ -279,6 +279,9 @@ GameObject:
   m_Component:
   - component: {fileID: 458548935}
   - component: {fileID: 458548936}
+  - component: {fileID: 458548939}
+  - component: {fileID: 458548938}
+  - component: {fileID: 458548937}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -310,6 +313,54 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d493baa150ab9c449bf936aedb7b5824, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &458548937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458548934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e416647d4aa533f4dabed377353e466c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHemisphere: {fileID: 136589522}
+  rightHemisphere: {fileID: 1349971647}
+  leftHemisphereGlow: {fileID: 1128119776}
+  rightHemisphereGlow: {fileID: 759358580}
+  emissiveColorTrue: {r: 0.19607843, g: 0.43137255, b: 0.6117647, a: 1}
+  emissiveColorFalse: {r: 0.08235294, g: 0.10980392, b: 0.14117648, a: 0}
+  emmissivecolorNeutral: {r: 0.08235294, g: 0.10980392, b: 0.14117648, a: 0}
+--- !u!114 &458548938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458548934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c7673473fe24de4cb91eb96fc18c12c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fixationCross: {fileID: 1457273695}
+  arrowLeft: {fileID: 1495367337}
+  arrowRight: {fileID: 1397419823}
+  brain: {fileID: 1343563342}
+  glow: {fileID: 323647811}
+--- !u!114 &458548939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458548934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede61c0ae87d11441b413b3a8bb87b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &525007577
@@ -1705,11 +1756,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2133819739}
-  - component: {fileID: 2133819740}
   - component: {fileID: 2133819741}
   - component: {fileID: 2133819743}
-  - component: {fileID: 2133819742}
-  - component: {fileID: 2133819744}
   - component: {fileID: 2133819738}
   m_Layer: 0
   m_Name: ScenarioController
@@ -1747,18 +1795,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2133819740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2133819737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ede61c0ae87d11441b413b3a8bb87b85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2133819741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1771,23 +1807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e057b96763aed348abff079f3eef7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2133819742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2133819737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c7673473fe24de4cb91eb96fc18c12c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fixationCross: {fileID: 1457273695}
-  arrowLeft: {fileID: 1495367337}
-  arrowRight: {fileID: 1397419823}
-  brain: {fileID: 1343563342}
-  glow: {fileID: 323647811}
 --- !u!114 &2133819743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1800,25 +1819,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 895a1dc9f20041449a4a2cb45a26c5d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2133819744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2133819737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e416647d4aa533f4dabed377353e466c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftHemisphere: {fileID: 136589522}
-  rightHemisphere: {fileID: 1349971647}
-  leftHemisphereGlow: {fileID: 1128119776}
-  rightHemisphereGlow: {fileID: 759358580}
-  emissiveColorTrue: {r: 0.19607843, g: 0.43137255, b: 0.6117647, a: 1}
-  emissiveColorFalse: {r: 0.08235294, g: 0.10980392, b: 0.14117648, a: 0}
-  emmissivecolorNeutral: {r: 0.08235294, g: 0.10980392, b: 0.14117648, a: 0}
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0

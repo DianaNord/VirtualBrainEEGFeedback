@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Controls the colour of the brain object.
+/// Observer class. Controls the texture of the brain object.
 /// </summary>
 public class TextureColorController : MonoBehaviour
 {
@@ -38,6 +38,16 @@ public class TextureColorController : MonoBehaviour
 
         materialsGlow[0] = leftHemisphereGlow.GetComponent<MeshRenderer>().material;
         materialsGlow[1] = rightHemisphereGlow.GetComponent<MeshRenderer>().material;
+    }
+
+    void Start()
+    {
+        EventManager.instance.TriggerResetObjects += ResetTexture;
+        EventManager.instance.TriggerTrialEnd += ResetTexture;
+        EventManager.instance.TriggerUpdateOutline += GlowIntensity;
+        EventManager.instance.TriggerUpdateSurface += UpdateERDSValues;
+
+        ResetTexture();
     }
 
     /// <summary>

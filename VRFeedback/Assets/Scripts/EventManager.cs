@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// The EventManager handles methods to invoke events.
+/// The EventManager handles event actions.
 /// </summary>
 public class EventManager : MonoBehaviour
 {
