@@ -33,8 +33,8 @@ public class ObjectsController : MonoBehaviour
         EventManager.instance.TriggerFeedback += OnFeedback;
         EventManager.instance.TriggerTrialEnd += OnTrialEnd;
         EventManager.instance.TriggerResetObjects += OnResetObjects;
-        EventManager.instance.TriggerUpdateGlow += OnUpdateGlow;
-        EventManager.instance.TriggerUpdateERDS += OnUpdateERDS;
+        EventManager.instance.TriggerUpdateOutline += OnUpdateOutline;
+        EventManager.instance.TriggerUpdateSurface += OnUpdateSurface;
 
         OnResetObjects();
     }
@@ -126,9 +126,9 @@ public class ObjectsController : MonoBehaviour
 	}
 
     /// <summary>
-    /// Updates the glow colour and intensity of the brain object.
+    /// Updates the outline colour and intensity of the brain object.
     /// </summary>
-    void OnUpdateGlow(float distance, bool is_correct)
+    void OnUpdateOutline(float distance, bool is_correct)
     {
         textureController.GlowIntensity(distance, is_correct);
     }
@@ -136,7 +136,7 @@ public class ObjectsController : MonoBehaviour
     /// <summary>
     /// Updates the colour of each region of interest of the brain object. 
     /// </summary>
-    public void OnUpdateERDS(float[] values)
+    public void OnUpdateSurface(float[] values)
     {
         textureController.UpdateERDSValues(values);
     }

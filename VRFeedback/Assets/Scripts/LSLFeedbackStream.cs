@@ -99,7 +99,7 @@ public class LSLFeedbackStream : MonoBehaviour
     {  
         bool is_classifier_correctly = (uint) newSample[0] == currentCondition;
         
-        EventManager.instance.OnTriggerUpdateGlow(newSample[1], is_classifier_correctly);
+        EventManager.instance.OnTriggerUpdateOutline(newSample[1], is_classifier_correctly);
     }
 
 }

@@ -28,8 +28,8 @@ public class EventManager : MonoBehaviour
     public event Action<uint> TriggerFeedback;
     public event Action TriggerTrialEnd;
     public event Action TriggerResetObjects;
-    public event Action<float, bool> TriggerUpdateGlow;
-    public event Action<float[]> TriggerUpdateERDS;
+    public event Action<float, bool> TriggerUpdateOutline;
+    public event Action<float[]> TriggerUpdateSurface;
 
 
     public void OnTriggerSessionStarted()
@@ -69,13 +69,13 @@ public class EventManager : MonoBehaviour
         TriggerResetObjects?.Invoke();
     }
 
-    public void OnTriggerUpdateGlow(float distance, bool is_correct)
+    public void OnTriggerUpdateOutline(float distance, bool is_correct)
     {
-        TriggerUpdateGlow?.Invoke(distance, is_correct);
+        TriggerUpdateOutline?.Invoke(distance, is_correct);
     }
 
-    public void OnTriggerUpdateERDS(float[] values)
+    public void OnTriggerUpdateSurface(float[] values)
     {
-        TriggerUpdateERDS?.Invoke(values);
+        TriggerUpdateSurface?.Invoke(values);
     }
 }

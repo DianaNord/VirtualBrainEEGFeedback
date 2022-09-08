@@ -93,6 +93,6 @@ public class LSLErdsStream : MonoBehaviour
     /// </summary>
     void Process(float[] newSample, double timeStamp)
     {
-        EventManager.instance.OnTriggerUpdateERDS(newSample);
+        EventManager.instance.OnTriggerUpdateSurface(newSample);
     }
 }
