@@ -28,13 +28,13 @@ public class LSLMarkerStream : MonoBehaviour
         if (!Initialize())
             ScenarioController.instance.QuitGame();
 
-        EventManager.instance.TriggerSessionStarted += OnSessionStarted;
-        EventManager.instance.TriggerSessionFinished += OnSessionFinished;
-        EventManager.instance.TriggerTrialStarted += OnTrialStarted;
-        EventManager.instance.TriggerReference += OnReference;
-        EventManager.instance.TriggerCue += OnCue;
-        EventManager.instance.TriggerFeedback += OnFeedback;
-        EventManager.instance.TriggerTrialEnd += OnTrialEnd;
+        EventManager.instance.SessionStarted += OnSessionStarted;
+        EventManager.instance.SessionFinished += OnSessionFinished;
+        EventManager.instance.TrialStarted += OnTrialStarted;
+        EventManager.instance.Reference += OnReference;
+        EventManager.instance.Cue += OnCue;
+        EventManager.instance.Feedback += OnFeedback;
+        EventManager.instance.TrialEnd += OnTrialEnd;
     }
 
     /// <summary>

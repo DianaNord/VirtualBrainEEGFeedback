@@ -20,62 +20,62 @@ public class EventManager : MonoBehaviour
             Destroy(this);
     }
 
-    public event Action TriggerSessionStarted;
-    public event Action TriggerSessionFinished;
-    public event Action<string> TriggerTrialStarted;
-    public event Action TriggerReference;
-    public event Action<uint> TriggerCue;
-    public event Action<uint> TriggerFeedback;
-    public event Action TriggerTrialEnd;
-    public event Action TriggerResetObjects;
-    public event Action<float, bool> TriggerUpdateOutline;
-    public event Action<float[]> TriggerUpdateSurface;
+    public event Action SessionStarted;
+    public event Action SessionFinished;
+    public event Action<string> TrialStarted;
+    public event Action Reference;
+    public event Action<uint> Cue;
+    public event Action<uint> Feedback;
+    public event Action TrialEnd;
+    public event Action ResetObjects;
+    public event Action<float, bool> UpdateOutline;
+    public event Action<float[]> UpdateSurface;
 
 
     public void OnTriggerSessionStarted()
     {
-        TriggerSessionStarted?.Invoke();
+        SessionStarted?.Invoke();
     }
     public void OnTriggerSessionFinished()
     {
-        TriggerSessionFinished?.Invoke();
+        SessionFinished?.Invoke();
     }
     public void OnTriggerTrialStarted(string condition)
     {
-        TriggerTrialStarted?.Invoke(condition);
+        TrialStarted?.Invoke(condition);
     }
     public void OnTriggerReference()
     {
-        TriggerReference?.Invoke();
+        Reference?.Invoke();
     }
 
     public void OnTriggerCue(uint condition)
     {
-        TriggerCue?.Invoke(condition);
+        Cue?.Invoke(condition);
     }
 
     public void OnTriggerFeedback(uint condition)
     {
-        TriggerFeedback?.Invoke(condition);
+        Feedback?.Invoke(condition);
     }
 
     public void OnTriggerTrialEnd()
     {
-        TriggerTrialEnd?.Invoke();
+        TrialEnd?.Invoke();
     }
 
     public void OnTriggerResetObjects()
     {
-        TriggerResetObjects?.Invoke();
+        ResetObjects?.Invoke();
     }
 
     public void OnTriggerUpdateOutline(float distance, bool is_correct)
     {
-        TriggerUpdateOutline?.Invoke(distance, is_correct);
+        UpdateOutline?.Invoke(distance, is_correct);
     }
 
     public void OnTriggerUpdateSurface(float[] values)
     {
-        TriggerUpdateSurface?.Invoke(values);
+        UpdateSurface?.Invoke(values);
     }
 }

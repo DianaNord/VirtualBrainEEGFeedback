@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Observer class. Controls the texture of the brain object.
 /// </summary>
-public class TextureColorController : MonoBehaviour
+public class TextureController : MonoBehaviour
 {
     public GameObject leftHemisphere;
     public GameObject rightHemisphere;
@@ -42,10 +42,10 @@ public class TextureColorController : MonoBehaviour
 
     void Start()
     {
-        EventManager.instance.TriggerResetObjects += ResetTexture;
-        EventManager.instance.TriggerTrialEnd += ResetTexture;
-        EventManager.instance.TriggerUpdateOutline += GlowIntensity;
-        EventManager.instance.TriggerUpdateSurface += UpdateERDSValues;
+        EventManager.instance.ResetObjects += ResetTexture;
+        EventManager.instance.TrialEnd += ResetTexture;
+        EventManager.instance.UpdateOutline += GlowIntensity;
+        EventManager.instance.UpdateSurface += UpdateERDSValues;
 
         ResetTexture();
     }

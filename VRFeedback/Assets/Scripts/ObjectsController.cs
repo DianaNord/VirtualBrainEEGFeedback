@@ -17,11 +17,11 @@ public class ObjectsController : MonoBehaviour
     void Start()
     {
         // Subscribe methods to events
-        EventManager.instance.TriggerReference += OnReference;
-        EventManager.instance.TriggerCue += OnCue;
-        EventManager.instance.TriggerFeedback += OnFeedback;
-        EventManager.instance.TriggerTrialEnd += OnResetObjects;
-        EventManager.instance.TriggerResetObjects += OnResetObjects;
+        EventManager.instance.Reference += OnReference;
+        EventManager.instance.Cue += OnCue;
+        EventManager.instance.Feedback += OnFeedback;
+        EventManager.instance.TrialEnd += OnResetObjects;
+        EventManager.instance.ResetObjects += OnResetObjects;
 
         OnResetObjects();
     }
