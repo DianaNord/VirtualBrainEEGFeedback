@@ -30,7 +30,7 @@ public class LSLMarkerStream : MonoBehaviour
 
         EventManager.instance.SessionStarted += OnSessionStarted;
         EventManager.instance.SessionFinished += OnSessionFinished;
-        EventManager.instance.TrialStarted += OnTrialStarted;
+        EventManager.instance.TrialStart += OnTrialStarted;
         EventManager.instance.Reference += OnReference;
         EventManager.instance.Cue += OnCue;
         EventManager.instance.Feedback += OnFeedback;

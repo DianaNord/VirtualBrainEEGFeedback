@@ -22,7 +22,7 @@ public class EventManager : MonoBehaviour
 
     public event Action SessionStarted;
     public event Action SessionFinished;
-    public event Action<string> TrialStarted;
+    public event Action<string> TrialStart;
     public event Action Reference;
     public event Action<uint> Cue;
     public event Action<uint> Feedback;
@@ -42,7 +42,7 @@ public class EventManager : MonoBehaviour
     }
     public void OnTriggerTrialStarted(string condition)
     {
-        TrialStarted?.Invoke(condition);
+        TrialStart?.Invoke(condition);
     }
     public void OnTriggerReference()
     {
