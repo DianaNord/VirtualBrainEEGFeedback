@@ -14,6 +14,8 @@ if __name__ == "__main__":
     eeg = reference_variables['eeg']
     n_samples, n_channels = np.shape(eeg)
 
+    n_samples = 128*5
+
     sample_rate = 128
     s_rate_half = sample_rate / 2
 
@@ -54,21 +56,36 @@ if __name__ == "__main__":
         class_label_list.append(label)
         distance_list.append(distance)
 
-    class_label_arr = np.array(class_label_list)
+    class_label_arr = np.array(class_label_list, dtype=int)
     distance_arr = np.array(distance_list)
 
     # Compare to Graz BCI model
-    class_label_ref = reference_variables['class_label']
-    distance_ref = reference_variables['distance']
+    class_label_ref = reference_variables['class_label'][:n_samples]
+    distance_ref = reference_variables['distance'][:n_samples]
 
-    plt.figure(1)
-    plt.plot(class_label_arr, 'b')
-    plt.plot(class_label_ref, 'r--')
-    plt.title('Class label')
+    diff_idx_cl = np.where(class_label_ref[:, 0] != class_label_arr)[0]
+    diff_idx_d = np.where(distance_ref[:, 0] != distance_arr)[0]
+    points = np.arange(0, n_samples, 1)
+
+    # TODO is diff necessary?
+    plt.plot(points, class_label_arr, 'g.')
+    plt.plot(points, class_label_ref, 'b.')
+    # plt.plot(points[diff_idx_cl], class_label_arr[diff_idx_cl], 'r.')
+    # plt.title('Class label')
+    plt.xlabel('sample', fontsize=20)
+    plt.ylabel('class label', fontsize=20)
+    plt.legend(['Python', 'Graz BCI', 'Difference'], fontsize=20)
+    plt.grid()
+    # plt.yticks([1, 2])
     plt.show()
 
     plt.figure(2)
-    plt.plot(distance_arr, 'b')
-    plt.plot(distance_ref, 'r--')
-    plt.title('Distance')
+    plt.plot(points, distance_arr, 'g.')
+    plt.plot(points, distance_ref, 'b.')
+    # plt.plot(points[diff_idx_d], distance_arr[diff_idx_d], 'ro')
+    # plt.title('Distance')
+    plt.legend(['Python', 'Graz BCI'], fontsize=20)
+    plt.xlabel('sample', fontsize=20)
+    plt.ylabel('distance', fontsize=20)
+    plt.grid()
     plt.show()

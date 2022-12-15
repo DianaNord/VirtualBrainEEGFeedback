@@ -81,6 +81,7 @@ public class TextureController : MonoBehaviour
         
         if (is_correct)
         {
+            print(intensity);
             intensity *= 1.5f;
             currentColor = emissiveColorTrue;
         } 
